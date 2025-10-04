@@ -1,0 +1,22 @@
+project_id = "naaohlrbreowzrjdwxje"
+
+[functions.quantum-predictor]
+verify_jwt = false
+
+[functions.openaq-proxy]
+verify_jwt = false
+
+[functions.airquality-openmeteo]
+verify_jwt = false
+
+[functions.disaster-impact-ai]
+verify_jwt = false
+
+[functions.chat-grok]
+verify_jwt = false
+
+[functions.ibm-quantum-runtime]
+verify_jwt = false
+
+[functions.quantum-aer-simulation]
+verify_jwt = false
