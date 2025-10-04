@@ -1,0 +1,199 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Earth Data Visualization Design System - Cinematic Space Theme
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Deep Space Theme */
+    --background: 220 27% 4%;
+    --foreground: 180 8% 95%;
+
+    --card: 220 27% 6%;
+    --card-foreground: 180 8% 95%;
+
+    --popover: 220 27% 8%;
+    --popover-foreground: 180 8% 95%;
+
+    /* Earth Inspired Colors */
+    --primary: 195 91% 55%;
+    --primary-foreground: 220 27% 4%;
+    --primary-glow: 195 91% 70%;
+
+    --secondary: 158 64% 52%;
+    --secondary-foreground: 220 27% 4%;
+    --secondary-glow: 158 64% 65%;
+
+    --muted: 220 27% 12%;
+    --muted-foreground: 180 8% 65%;
+
+    --accent: 45 93% 58%;
+    --accent-foreground: 220 27% 4%;
+    --accent-glow: 45 93% 70%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 180 8% 95%;
+
+    --border: 220 27% 15%;
+    --input: 220 27% 12%;
+    --ring: 195 91% 55%;
+
+    --radius: 0.75rem;
+
+    /* Custom Design Tokens */
+    --earth-blue: 195 91% 55%;
+    --earth-green: 158 64% 52%;
+    --earth-atmosphere: 200 50% 70%;
+    --pollution-red: 0 84% 60%;
+    --clean-green: 120 60% 50%;
+    
+    /* Gradients */
+    --gradient-earth: linear-gradient(135deg, hsl(var(--earth-blue)), hsl(var(--earth-green)));
+    --gradient-space: linear-gradient(180deg, hsl(220 27% 4%), hsl(220 35% 8%));
+    --gradient-pollution: linear-gradient(90deg, hsl(var(--clean-green)), hsl(var(--pollution-red)));
+    --gradient-glow: radial-gradient(circle, hsl(var(--primary-glow) / 0.3), transparent 70%);
+    
+    /* Shadows & Effects */
+    --shadow-glow: 0 0 40px hsl(var(--primary) / 0.3);
+    --shadow-earth: 0 20px 60px hsl(var(--earth-blue) / 0.2);
+    --shadow-glass: 0 8px 32px hsl(220 27% 4% / 0.37);
+    
+    /* Glassmorphism */
+    --glass-bg: hsl(220 27% 8% / 0.8);
+    --glass-border: hsl(180 8% 95% / 0.1);
+    
+    /* Animations */
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  /* Single theme - always space theme */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground overflow-hidden;
+    background: var(--gradient-space);
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  /* Glassmorphism utilities - Liquid Glass Effect */
+  .glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+
+  .glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .earth-glow {
+    box-shadow: var(--shadow-earth);
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.5);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.7);
+  }
+
+  /* Scrollbar utilities */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary) / 0.5) transparent;
+  }
+
+  .scrollbar-track-transparent {
+    scrollbar-color: hsl(var(--primary) / 0.5) transparent;
+  }
+
+  .scrollbar-thumb-primary\/20 {
+    scrollbar-color: hsl(var(--primary) / 0.2) transparent;
+  }
+
+  .scrollbar-thumb-primary\/30 {
+    scrollbar-color: hsl(var(--primary) / 0.3) transparent;
+  }
+
+  .scrollbar-thumb-primary\/50 {
+    scrollbar-color: hsl(var(--primary) / 0.5) transparent;
+  }
+
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Text utilities */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Birthday confetti animation */
+  @keyframes float {
+    0% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  .animate-float {
+    animation: float linear infinite;
+  }
+}
