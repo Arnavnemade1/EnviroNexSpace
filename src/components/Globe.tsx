@@ -5,7 +5,6 @@ import { interpolateRdYlBu } from 'd3-scale-chromatic';
 import { SatelliteData } from '@/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
-import { Cake, PartyPopper } from 'lucide-react';
 
 interface GlobeComponentProps {
   onCityClick?: (lat: number, lng: number) => void;
@@ -24,7 +23,6 @@ export const GlobeComponent = ({
   const globeInstanceRef = useRef<any>(null);
   const [satellites, setSatellites] = useState<SatelliteData[]>([]);
   const [selectedSatellite, setSelectedSatellite] = useState<SatelliteData | null>(null);
-  const [showBirthdayEffects, setShowBirthdayEffects] = useState(true);
 
   // Generate satellite data
   useEffect(() => {
@@ -37,7 +35,7 @@ export const GlobeComponent = ({
           lng: 0.0,
           altitude: 408,
           velocity: 7.66,
-          description: 'The ISS orbits Earth approximately every 90 minutes at an altitude of ~408 km'
+          description: '🎂 Happy Birthday ISS! The ISS orbits Earth approximately every 90 minutes at an altitude of ~408 km'
         },
         {
           id: 'hubble',
@@ -194,40 +192,26 @@ export const GlobeComponent = ({
         satelliteGroup.add(panel1);
         satelliteGroup.add(panel2);
 
-        // Add glow effect
-        const glowGeometry = new THREE.SphereGeometry(1.5);
-        const glowMaterial = new THREE.MeshLambertMaterial({
-          color: isISS ? '#fbbf24' : '#60a5fa',
-          transparent: true,
-          opacity: 0.3
-        });
-        const glow = new THREE.Mesh(glowGeometry, glowMaterial);
-        satelliteGroup.add(glow);
-
-        // Add birthday circle for ISS
-        if (isISS && showBirthdayEffects) {
-          const circleGeometry = new THREE.RingGeometry(2.5, 3, 64);
-          const circleMaterial = new THREE.MeshBasicMaterial({
-            color: '#fbbf24',
-            side: THREE.DoubleSide,
-            transparent: true,
-            opacity: 0.6
-          });
-          const circle = new THREE.Mesh(circleGeometry, circleMaterial);
-          circle.rotation.x = Math.PI / 2;
-          satelliteGroup.add(circle);
-
-          // Add pulsing outer circle
-          const outerCircleGeometry = new THREE.RingGeometry(3.5, 4, 64);
-          const outerCircleMaterial = new THREE.MeshBasicMaterial({
-            color: '#f97316',
-            side: THREE.DoubleSide,
+        // Add gold glow aura for ISS
+        if (isISS) {
+          const glowGeometry = new THREE.SphereGeometry(2.5);
+          const glowMaterial = new THREE.MeshLambertMaterial({
+            color: '#ffd700',
             transparent: true,
             opacity: 0.4
           });
-          const outerCircle = new THREE.Mesh(outerCircleGeometry, outerCircleMaterial);
-          outerCircle.rotation.x = Math.PI / 2;
-          satelliteGroup.add(outerCircle);
+          const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+          satelliteGroup.add(glow);
+        } else {
+          // Add normal glow for other satellites
+          const glowGeometry = new THREE.SphereGeometry(1.5);
+          const glowMaterial = new THREE.MeshLambertMaterial({
+            color: '#60a5fa',
+            transparent: true,
+            opacity: 0.3
+          });
+          const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+          satelliteGroup.add(glow);
         }
 
         return satelliteGroup;
@@ -272,40 +256,6 @@ export const GlobeComponent = ({
     <div className="relative w-full h-full overflow-hidden">
       <div ref={globeRef} className="w-full h-full" />
 
-      {/* ISS Birthday Shortcut Button */}
-      {showSatellites && showBirthdayEffects && (
-        <div className="absolute top-4 left-4 z-50">
-          <Button
-            onClick={goToISS}
-            className="glass bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white shadow-xl hover:scale-110 transition-all duration-300 border-2 border-yellow-400/50 animate-bounce"
-            size="lg"
-          >
-            <Cake className="w-5 h-5 mr-2" />
-            ISS Birthday!
-            <PartyPopper className="w-5 h-5 ml-2" />
-          </Button>
-        </div>
-      )}
-
-      {/* Birthday Confetti Effect */}
-      {showBirthdayEffects && (
-        <div className="absolute inset-0 pointer-events-none z-10">
-          {[...Array(30)].map((_, i) => (
-            <div
-              key={`confetti-${i}`}
-              className="absolute w-2 h-2 rounded-full animate-float"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `-${Math.random() * 20}%`,
-                backgroundColor: ['#fbbf24', '#f97316', '#ef4444', '#ec4899', '#8b5cf6'][Math.floor(Math.random() * 5)],
-                animationDelay: `${Math.random() * 5}s`,
-                animationDuration: `${5 + Math.random() * 5}s`,
-                opacity: 0.8
-              }}
-            />
-          ))}
-        </div>
-      )}
 
       {/* Gradient overlay for atmospheric effect */}
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-transparent to-background/10" />
@@ -338,20 +288,7 @@ export const GlobeComponent = ({
             >
               ✕
             </button>
-            <div className="flex items-center gap-2 mb-2">
-              <h3 className="font-bold text-lg text-primary">{selectedSatellite.name}</h3>
-              {selectedSatellite.id === 'iss' && showBirthdayEffects && (
-                <div className="flex items-center gap-1 text-yellow-500 animate-pulse">
-                  <Cake className="w-5 h-5" />
-                  <PartyPopper className="w-5 h-5" />
-                </div>
-              )}
-            </div>
-            {selectedSatellite.id === 'iss' && showBirthdayEffects && (
-              <div className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-lg px-3 py-2 mb-3 border border-yellow-400/30">
-                <p className="text-sm font-semibold text-yellow-600">Happy Birthday ISS!</p>
-              </div>
-            )}
+            <h3 className="font-bold text-lg text-primary mb-2">{selectedSatellite.name}</h3>
             <p className="text-sm text-muted-foreground mb-3">{selectedSatellite.description}</p>
             <div className="space-y-1 text-sm">
               <div className="flex justify-between">
