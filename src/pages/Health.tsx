@@ -32,15 +32,15 @@ const Health = () => {
     // Check if we have the required data
     if (!state?.cityName || !state?.airQuality) {
       toast.error("Health analysis requires air quality data. Redirecting to home...");
-      setTimeout(() => navigate('/'), 2000);
+      setTimeout(() => navigate('/', { state: { skipHomeScreen: true } }), 2000);
       return;
     }
-    
+
     setIsLoading(false);
   }, [state, navigate]);
 
   const handleBackToHome = () => {
-    navigate('/');
+    navigate('/', { state: { skipHomeScreen: true } });
   };
 
   if (isLoading) {

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import GlobeComponent from '@/components/Globe';
@@ -23,6 +24,7 @@ import { AirQualityData, PredictionData, CityData } from '@/types';
 const Index = () => {
   const { toast } = useToast();
   const { user, userProfile, loading: authLoading } = useAuth();
+  const location = useLocation();
   const [selectedCity, setSelectedCity] = useState<CityData | null>(null);
   const [airQuality, setAirQuality] = useState<AirQualityData | null>(null);
   const [predictions, setPredictions] = useState<PredictionData[]>([]);
@@ -32,7 +34,7 @@ const Index = () => {
   const [currentScenario, setCurrentScenario] = useState<'current' | 'clean_energy' | 'no_action'>('current');
   const [showIntro, setShowIntro] = useState(true);
   const [globeHue, setGlobeHue] = useState<string>('none');
-  const [showHomeScreen, setShowHomeScreen] = useState(true);
+  const [showHomeScreen, setShowHomeScreen] = useState(!location.state?.skipHomeScreen);
   const [showDisasters, setShowDisasters] = useState(false);
   const [showQuantumAnalytics, setShowQuantumAnalytics] = useState(false);
   const [showUserProfile, setShowUserProfile] = useState(false);
