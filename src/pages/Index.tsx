@@ -35,6 +35,20 @@ const Index = () => {
   const [showIntro, setShowIntro] = useState(true);
   const [globeHue, setGlobeHue] = useState<string>('none');
   const [showHomeScreen, setShowHomeScreen] = useState(!location.state?.skipHomeScreen);
+
+  // Handle returning to a specific city
+  useEffect(() => {
+    const returnToCity = location.state?.returnToCity;
+    if (returnToCity?.lat && returnToCity?.lng && returnToCity?.name) {
+      const [name, country] = returnToCity.name.split(', ');
+      handleCitySelect({
+        name: name || returnToCity.name,
+        country: country || '',
+        lat: returnToCity.lat,
+        lng: returnToCity.lng
+      });
+    }
+  }, [location.state?.returnToCity]);
   const [showDisasters, setShowDisasters] = useState(false);
   const [showQuantumAnalytics, setShowQuantumAnalytics] = useState(false);
   const [showUserProfile, setShowUserProfile] = useState(false);
@@ -299,6 +313,8 @@ const Index = () => {
       {selectedCity && airQuality && predictions.length > 0 && !showQuantumAnalytics && (
         <DataPanel
           cityName={`${selectedCity.name}, ${selectedCity.country}`}
+          cityLat={selectedCity.lat}
+          cityLng={selectedCity.lng}
           airQuality={airQuality}
           predictions={predictions}
           quantumForecast={quantumForecast ?? undefined}

@@ -21,13 +21,13 @@ Deno.serve(async (req) => {
 
   try {
     const { message, context }: ChatRequest = await req.json();
-    const GROK_API_KEY = Deno.env.get('GROK_API_KEY');
+    const LLAMA_API_KEY = Deno.env.get('LLAMA_API_KEY') || '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';
 
-    if (!GROK_API_KEY) {
-      throw new Error('GROK_API_KEY not configured');
+    if (!LLAMA_API_KEY) {
+      throw new Error('LLAMA_API_KEY not configured');
     }
 
-    const systemPrompt = `You are Grok-4 Fast, an advanced AI assistant specialized in air quality, climate change, quantum computing applications, and environmental science.
+    const systemPrompt = `You are an advanced AI assistant specialized in air quality, climate change, quantum computing applications, and environmental science.
 Provide accurate, insightful responses about air quality, pollution, climate predictions, IBM Quantum computing applications, and Earth observation data.
 Be conversational but precise. Keep responses informative and engaging (2-4 sentences).`;
 
@@ -40,13 +40,13 @@ Current forecast year: ${new Date().getFullYear() + (context.currentYear || 0)}
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${GROK_API_KEY}`,
+        'Authorization': `Bearer ${LLAMA_API_KEY}`,
         'HTTP-Referer': 'https://environex.app',
         'X-Title': 'EnviroNex - Quantum-Enhanced Air Quality',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'x-ai/grok-2-vision-1212',
+        model: 'meta-llama/llama-3.3-70b-instruct',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: contextInfo + '\n\nUser question: ' + message }
@@ -58,8 +58,8 @@ Current forecast year: ${new Date().getFullYear() + (context.currentYear || 0)}
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Grok-4 API error:', response.status, errorText);
-      throw new Error(`Grok-4 API error: ${response.status}`);
+      console.error('Llama API error:', response.status, errorText);
+      throw new Error(`Llama API error: ${response.status}`);
     }
 
     const data = await response.json();
@@ -68,8 +68,8 @@ Current forecast year: ${new Date().getFullYear() + (context.currentYear || 0)}
       return new Response(
         JSON.stringify({
           response: data.choices[0].message.content,
-          model: 'grok-2-vision-1212',
-          powered_by: 'Grok-4 Fast'
+          model: 'meta-llama/llama-3.3-70b-instruct',
+          powered_by: 'Llama 3.3 70B'
         }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -77,13 +77,13 @@ Current forecast year: ${new Date().getFullYear() + (context.currentYear || 0)}
       );
     }
 
-    throw new Error('Invalid response format from Grok-4 API');
+    throw new Error('Invalid response format from AI API');
   } catch (error) {
-    console.error('Grok-4 chat error:', error);
+    console.error('AI chat error:', error);
     return new Response(
       JSON.stringify({
         error: error instanceof Error ? error.message : String(error),
-        fallback_message: 'Grok-4 is currently unavailable. Please try again.'
+        fallback_message: 'AI assistant is currently unavailable. Please try again.'
       }),
       {
         status: 500,

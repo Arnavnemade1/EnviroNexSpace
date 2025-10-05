@@ -8,6 +8,8 @@ import { toast } from 'sonner';
 
 interface LocationState {
   cityName?: string;
+  cityLat?: number;
+  cityLng?: number;
   airQuality?: {
     aqi: number;
     pm25: number;
@@ -30,7 +32,7 @@ const Health = () => {
   
   useEffect(() => {
     // Check if we have the required data
-    if (!state?.cityName || !state?.airQuality) {
+    if (!state?.cityName || !state?.airQuality || state?.cityLat === undefined || state?.cityLng === undefined) {
       toast.error("Health analysis requires air quality data. Redirecting to home...");
       setTimeout(() => navigate('/', { state: { skipHomeScreen: true } }), 2000);
       return;
@@ -40,7 +42,16 @@ const Health = () => {
   }, [state, navigate]);
 
   const handleBackToHome = () => {
-    navigate('/', { state: { skipHomeScreen: true } });
+    navigate('/', {
+      state: {
+        skipHomeScreen: true,
+        returnToCity: {
+          lat: state?.cityLat,
+          lng: state?.cityLng,
+          name: state?.cityName
+        }
+      }
+    });
   };
 
   if (isLoading) {
